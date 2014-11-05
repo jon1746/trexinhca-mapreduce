@@ -1,4 +1,4 @@
-package com.drools.examples.helloworld
+package com.drools.examples.mapreduce
  
 import com.trexinhca.TrexinHCATest.Message;
  
@@ -17,7 +17,7 @@ rule "GoodBye"
     when
         Message( status == Message.GOODBYE, myMessage : message )
     then
-       // System.out.println( myMessage );
+      m.addClassification("FOO") 
 end
 
 

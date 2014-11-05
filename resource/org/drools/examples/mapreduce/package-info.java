@@ -5,4 +5,4 @@
  * @author jonw
  *
  */
-package org.drools.examples.helloworld;
+package org.drools.examples.mapreduce;
