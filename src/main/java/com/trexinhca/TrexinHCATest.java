@@ -33,41 +33,38 @@ import org.apache.hadoop.util.GenericOptionsParser;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession; 
+import org.kie.api.runtime.rule.FactHandle;
 
 public class TrexinHCATest {
-
+	
+	  public static KieServices ks;
+	  public static KieContainer kContainer;
+	  public static KieSession ksession;
   public static class TokenizerMapper 
        extends Mapper<Object, Text, Text, Text>{
     
-    
-
+	  
       
     public void map(Object key, Text value, Context context
                     ) throws IOException, InterruptedException {
-    	System.err.println("Made it to Mapper");
+    	
    	String[] strings = value.toString().split(",");
     	Text newKey = new Text(strings[1]);
     	
-    	
+    	//  System.out.println( strings.length );
 	     
-	     if (strings.length > 140 ){
-    	try {
-            // load up the knowledge base
-	        KieServices ks = KieServices.Factory.get();
-    	    KieContainer kContainer = ks.getKieClasspathContainer();
-    	     KieSession ksession = kContainer.newKieSession("HelloWorldKS");
-
-            // go !
-    
+	     if (strings.length > 129 ){
+    	
+          
+    		System.out.println("Made it to rules");
             Message message = new Message(strings);
             message.setMessage("Hello World");
             message.setStatus(Message.HELLO);
-            ksession.insert(message);
-            ksession.fireAllRules();
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }	};
-
+            FactHandle fh =TrexinHCATest.ksession.insert(message);
+            TrexinHCATest.ksession.fireAllRules();
+            TrexinHCATest.ksession.delete(fh);
+            System.out.println(message.getDESYNPUF_ID());
+	     }
         context.write( newKey, value);
       
     }
@@ -109,7 +106,11 @@ public class TrexinHCATest {
             t.printStackTrace();
         }	
 */
-	  System.err.println("Made it to main"); 
+	  ks = KieServices.Factory.get();
+	     kContainer = ks.getKieClasspathContainer();
+	      ksession = TrexinHCATest.kContainer.newKieSession("HelloWorldKS");
+	   
+	  //System.err.println("Made it to main"); 
 	  
     Configuration conf = new Configuration();
     String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
@@ -386,7 +387,7 @@ public class TrexinHCATest {
     	  LINE_BENE_PRMRY_PYR_PD_AMT_11=inputs[88];
     	  LINE_BENE_PRMRY_PYR_PD_AMT_12=inputs[89];
     	  LINE_BENE_PRMRY_PYR_PD_AMT_13=inputs[90];
-    	  LINE_COINSRNC_AMT_1=inputs[91];
+ /*   	  LINE_COINSRNC_AMT_1=inputs[91];
     	  LINE_COINSRNC_AMT_2=inputs[92];
     	  LINE_COINSRNC_AMT_3=inputs[93];
     	  LINE_COINSRNC_AMT_4=inputs[94];
@@ -437,8 +438,8 @@ public class TrexinHCATest {
     	  LINE_ICD9_DGNS_CD_10=inputs[139];
     	  LINE_ICD9_DGNS_CD_11=inputs[140];
     	  LINE_ICD9_DGNS_CD_12=inputs[141];
-   // 	  LINE_ICD9_DGNS_CD_13=inputs[142];
-      
+     	  LINE_ICD9_DGNS_CD_13=inputs[142];
+      */
       }
       
       private int status;
