@@ -15,9 +15,9 @@ end
 
 rule "GoodBye"
     when
-        Message( status == Message.GOODBYE, myMessage : message )
+       m : Message( status == Message.GOODBYE, myMessage : message )
     then
-      m.addClassification("FOO") 
+      m.addClassification("FOO") ;
 end
 
 

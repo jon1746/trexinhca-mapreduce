@@ -64,6 +64,7 @@ public class TrexinHCATest {
 				FactHandle fh = TrexinHCATest.ksession.insert(message);
 				TrexinHCATest.ksession.fireAllRules();
 				TrexinHCATest.ksession.delete(fh);
+				//System.out.println(message.getClassifications());
 				// long endTime = System.nanoTime();
 
 				// long duration = (endTime - startTime); //divide by 1000000 to
@@ -427,6 +428,14 @@ public class TrexinHCATest {
 			 * LINE_ICD9_DGNS_CD_12=inputs[141];
 			 * LINE_ICD9_DGNS_CD_13=inputs[142];
 			 */
+		}
+
+		public List<String> getClassifications() {
+			return classifications;
+		}
+
+		public void setClassifications(List<String> classifications) {
+			this.classifications = classifications;
 		}
 
 		public void addClassification(String classification) {
