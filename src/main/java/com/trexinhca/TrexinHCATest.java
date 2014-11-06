@@ -34,8 +34,10 @@ import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
+
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class TrexinHCATest {
 
@@ -50,28 +52,27 @@ public class TrexinHCATest {
 				throws IOException, InterruptedException {
 
 			String[] strings = value.toString().split(",");
-			Text newKey = new Text(strings[1]);
-
 			// System.out.println( strings.length );
 
-			if (strings.length > 129) {
+			// System.out.println("Made it to rules");
+			// long startTime = System.nanoTime();
+			Message message = new Message(strings);
+			message.setMessage("Hello World");
+			message.setStatus(Message.HELLO);
+			FactHandle fh = TrexinHCATest.ksession.insert(message);
+			TrexinHCATest.ksession.fireAllRules();
+			TrexinHCATest.ksession.delete(fh);
+			// System.out.println(message.getClassifications());
+			// long endTime = System.nanoTime();
 
-				// System.out.println("Made it to rules");
-				// long startTime = System.nanoTime();
-				Message message = new Message(strings);
-				message.setMessage("Hello World");
-				message.setStatus(Message.HELLO);
-				FactHandle fh = TrexinHCATest.ksession.insert(message);
-				TrexinHCATest.ksession.fireAllRules();
-				TrexinHCATest.ksession.delete(fh);
-				//System.out.println(message.getClassifications());
-				// long endTime = System.nanoTime();
-
-				// long duration = (endTime - startTime); //divide by 1000000 to
-				// get milliseconds.
-				// System.out.println(duration);
-			}
-			context.write(newKey, value);
+			// long duration = (endTime - startTime); //divide by 1000000 to
+			// get milliseconds.
+			// System.out.println(duration)
+			Iterator<String> iterator = message.getClassifications().iterator();
+	        while (iterator.hasNext()) {
+	        	context.write(new Text(iterator.next()), value);
+	        }
+		
 
 		}
 	}
@@ -83,10 +84,13 @@ public class TrexinHCATest {
 		@Override
 		public void reduce(Text key, Iterable<Text> values, Context context)
 				throws IOException, InterruptedException {
-			int sum = 0;
+
 			// System.err.println("Made it to Reducer");
+			int sum = 0;
 			for (Text val : values) {
 				sum++;
+				System.out.println(key);
+				System.out.println(val.toString());
 			}
 			Text textResult = new Text(Integer.toString(sum));
 			context.write(key, textResult);
@@ -348,46 +352,41 @@ public class TrexinHCATest {
 			HCPCS_CD_11 = inputs[49];
 			HCPCS_CD_12 = inputs[50];
 			HCPCS_CD_13 = inputs[51];
-			LINE_NCH_PMT_AMT_1 = inputs[52];
-			LINE_NCH_PMT_AMT_2 = inputs[53];
-			LINE_NCH_PMT_AMT_3 = inputs[54];
-			LINE_NCH_PMT_AMT_4 = inputs[55];
-			LINE_NCH_PMT_AMT_5 = inputs[56];
-			LINE_NCH_PMT_AMT_6 = inputs[57];
-			LINE_NCH_PMT_AMT_7 = inputs[58];
-			LINE_NCH_PMT_AMT_8 = inputs[59];
-			LINE_NCH_PMT_AMT_9 = inputs[60];
-			LINE_NCH_PMT_AMT_10 = inputs[61];
-			LINE_NCH_PMT_AMT_11 = inputs[62];
-			LINE_NCH_PMT_AMT_12 = inputs[63];
-			LINE_NCH_PMT_AMT_13 = inputs[64];
-			LINE_BENE_PTB_DDCTBL_AMT_1 = inputs[65];
-			LINE_BENE_PTB_DDCTBL_AMT_2 = inputs[66];
-			LINE_BENE_PTB_DDCTBL_AMT_3 = inputs[67];
-			LINE_BENE_PTB_DDCTBL_AMT_4 = inputs[68];
-			LINE_BENE_PTB_DDCTBL_AMT_5 = inputs[69];
-			LINE_BENE_PTB_DDCTBL_AMT_6 = inputs[70];
-			LINE_BENE_PTB_DDCTBL_AMT_7 = inputs[71];
-			LINE_BENE_PTB_DDCTBL_AMT_8 = inputs[72];
-			LINE_BENE_PTB_DDCTBL_AMT_9 = inputs[73];
-			LINE_BENE_PTB_DDCTBL_AMT_10 = inputs[74];
-			LINE_BENE_PTB_DDCTBL_AMT_11 = inputs[75];
-			LINE_BENE_PTB_DDCTBL_AMT_12 = inputs[76];
-			LINE_BENE_PTB_DDCTBL_AMT_13 = inputs[77];
-			LINE_BENE_PRMRY_PYR_PD_AMT_1 = inputs[78];
-			LINE_BENE_PRMRY_PYR_PD_AMT_2 = inputs[79];
-			LINE_BENE_PRMRY_PYR_PD_AMT_3 = inputs[80];
-			LINE_BENE_PRMRY_PYR_PD_AMT_4 = inputs[81];
-			LINE_BENE_PRMRY_PYR_PD_AMT_5 = inputs[82];
-			LINE_BENE_PRMRY_PYR_PD_AMT_6 = inputs[83];
-			LINE_BENE_PRMRY_PYR_PD_AMT_7 = inputs[84];
-			LINE_BENE_PRMRY_PYR_PD_AMT_8 = inputs[85];
-			LINE_BENE_PRMRY_PYR_PD_AMT_9 = inputs[86];
-			LINE_BENE_PRMRY_PYR_PD_AMT_10 = inputs[87];
-			LINE_BENE_PRMRY_PYR_PD_AMT_11 = inputs[88];
-			LINE_BENE_PRMRY_PYR_PD_AMT_12 = inputs[89];
-			LINE_BENE_PRMRY_PYR_PD_AMT_13 = inputs[90];
 			/*
+			 * LINE_NCH_PMT_AMT_1 = inputs[52]; LINE_NCH_PMT_AMT_2 = inputs[53];
+			 * LINE_NCH_PMT_AMT_3 = inputs[54]; LINE_NCH_PMT_AMT_4 = inputs[55];
+			 * LINE_NCH_PMT_AMT_5 = inputs[56]; LINE_NCH_PMT_AMT_6 = inputs[57];
+			 * LINE_NCH_PMT_AMT_7 = inputs[58]; LINE_NCH_PMT_AMT_8 = inputs[59];
+			 * LINE_NCH_PMT_AMT_9 = inputs[60]; LINE_NCH_PMT_AMT_10 =
+			 * inputs[61]; LINE_NCH_PMT_AMT_11 = inputs[62]; LINE_NCH_PMT_AMT_12
+			 * = inputs[63]; LINE_NCH_PMT_AMT_13 = inputs[64];
+			 * LINE_BENE_PTB_DDCTBL_AMT_1 = inputs[65];
+			 * LINE_BENE_PTB_DDCTBL_AMT_2 = inputs[66];
+			 * LINE_BENE_PTB_DDCTBL_AMT_3 = inputs[67];
+			 * LINE_BENE_PTB_DDCTBL_AMT_4 = inputs[68];
+			 * LINE_BENE_PTB_DDCTBL_AMT_5 = inputs[69];
+			 * LINE_BENE_PTB_DDCTBL_AMT_6 = inputs[70];
+			 * LINE_BENE_PTB_DDCTBL_AMT_7 = inputs[71];
+			 * LINE_BENE_PTB_DDCTBL_AMT_8 = inputs[72];
+			 * LINE_BENE_PTB_DDCTBL_AMT_9 = inputs[73];
+			 * LINE_BENE_PTB_DDCTBL_AMT_10 = inputs[74];
+			 * LINE_BENE_PTB_DDCTBL_AMT_11 = inputs[75];
+			 * LINE_BENE_PTB_DDCTBL_AMT_12 = inputs[76];
+			 * LINE_BENE_PTB_DDCTBL_AMT_13 = inputs[77];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_1 = inputs[78];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_2 = inputs[79];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_3 = inputs[80];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_4 = inputs[81];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_5 = inputs[82];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_6 = inputs[83];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_7 = inputs[84];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_8 = inputs[85];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_9 = inputs[86];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_10 = inputs[87];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_11 = inputs[88];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_12 = inputs[89];
+			 * LINE_BENE_PRMRY_PYR_PD_AMT_13 = inputs[90];
+			 * 
 			 * LINE_COINSRNC_AMT_1=inputs[91]; LINE_COINSRNC_AMT_2=inputs[92];
 			 * LINE_COINSRNC_AMT_3=inputs[93]; LINE_COINSRNC_AMT_4=inputs[94];
 			 * LINE_COINSRNC_AMT_5=inputs[95]; LINE_COINSRNC_AMT_6=inputs[96];
