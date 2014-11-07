@@ -84,14 +84,14 @@ public class TrexinHCATest {
 		@Override
 		public void reduce(Text key, Iterable<Text> values, Context context)
 				throws IOException, InterruptedException {
-
-			// System.err.println("Made it to Reducer");
+      
+			System.out.println(key);
 			int sum = 0;
 			for (Text val : values) {
 				sum++;
-				System.out.println(key);
-				System.out.println(val.toString());
+	//			System.out.println(val.toString());
 			}
+			System.out.println(sum);
 			Text textResult = new Text(Integer.toString(sum));
 			context.write(key, textResult);
 		}
@@ -120,7 +120,7 @@ public class TrexinHCATest {
 		String[] otherArgs = new GenericOptionsParser(conf, args)
 				.getRemainingArgs();
 		if (otherArgs.length < 2) {
-			System.err.println("Usage: wordcount <in> [<in>...] <out>");
+			System.err.println("Usage: TrexinHCATest <in> [<in>...] <out>");
 			System.exit(2);
 		}
 		Job job = Job.getInstance(conf);

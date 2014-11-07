@@ -10,7 +10,9 @@ rule "Hello World"
         m.setMessage( "Goodbye cruel world" );
         m.setStatus( Message.GOODBYE );
         m.setDESYNPUF_ID("FOO");
+        m.addClassification("BAR");
         update( m );
+     
 end
 
 rule "GoodBye"
