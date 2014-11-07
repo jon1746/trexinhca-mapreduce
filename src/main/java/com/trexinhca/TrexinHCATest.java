@@ -51,14 +51,14 @@ public class TrexinHCATest {
 		public void map(Object key, Text value, Context context)
 				throws IOException, InterruptedException {
 
-			String[] strings = value.toString().split(",");
+		
 			// System.out.println( strings.length );
 
 			// System.out.println("Made it to rules");
 			// long startTime = System.nanoTime();
-			Message message = new Message(strings);
+			MapperMessage message = new MapperMessage(value.toString());
 			message.setMessage("Hello World");
-			message.setStatus(Message.HELLO);
+			message.setStatus(MapperMessage.HELLO);
 			FactHandle fh = TrexinHCATest.ksession.insert(message);
 			TrexinHCATest.ksession.fireAllRules();
 			TrexinHCATest.ksession.delete(fh);
@@ -70,7 +70,7 @@ public class TrexinHCATest {
 			// System.out.println(duration)
 			Iterator<String> iterator = message.getClassifications().iterator();
 	        while (iterator.hasNext()) {
-	        	context.write(new Text(iterator.next()), value);
+	        	context.write(new Text(iterator.next()), new Text(message.toString()));
 	        }
 		
 
@@ -136,12 +136,11 @@ public class TrexinHCATest {
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
 		job.setJarByClass(TrexinHCATest.class);
-
 		job.waitForCompletion(true);
 
 	}
 
-	public static class Message {
+	public static class MapperMessage {
 
 		public String getLINE_ICD9_DGNS_CD_13() {
 			return LINE_ICD9_DGNS_CD_13;
@@ -298,8 +297,8 @@ public class TrexinHCATest {
 		private String LINE_ICD9_DGNS_CD_12;
 		private String LINE_ICD9_DGNS_CD_13;
 
-		public Message(String[] inputs) {
-
+		public MapperMessage(String value) {
+			String[] inputs = value.toString().split(",");
 			classifications = new ArrayList<String>();
 			DESYNPUF_ID = inputs[0];
 			CLM_ID = inputs[1];
@@ -1612,6 +1611,13 @@ public class TrexinHCATest {
 		public void setLINE_ICD9_DGNS_CD_12(String lINE_ICD9_DGNS_CD_12) {
 			LINE_ICD9_DGNS_CD_12 = lINE_ICD9_DGNS_CD_12;
 		}
+		
+		public String toString(){
+			
+			return CLM_ID + ","+ CLM_FROM_DT;
+		
+		}
+		
 
 	}
 
