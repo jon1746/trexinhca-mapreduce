@@ -9,10 +9,10 @@ rule "Hello World"
      //   System.out.println( myMessage );
         m.setMessage( "Goodbye cruel world" );
         m.setStatus( MapperMessage.GOODBYE );
-        m.setDESYNPUF_ID("FOO");
+        m.setDESYNPUF_ID("XXX");
         m.addClassification("BAR");
         update( m );
-     
+  //   System.out.println("You made it here2");
 end
 
 rule "GoodBye"
@@ -22,4 +22,10 @@ rule "GoodBye"
       m.addClassification("FOO") ;
 end
 
-
+rule "Hospital Code 1"
+    when
+       m : MapperMessage(  HCPCS_CD_1 != "", myMessage : message )
+    then
+      m.addClassification(m.getHCPCS_CD_1()) ;
+    // System.out.println("Here");
+end

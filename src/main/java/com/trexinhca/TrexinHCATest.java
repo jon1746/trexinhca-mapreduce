@@ -66,7 +66,10 @@ public class TrexinHCATest {
 			// System.out.println(duration)
 			Iterator<String> iterator = message.getClassifications().iterator();
 	        while (iterator.hasNext()) {
-	        	context.write(new Text(iterator.next()), new Text(message.toString()));
+	        	Text newKey=new Text(iterator.next());
+	        //	System.out.println(newKey);
+	        	context.write(newKey, new Text(message.toString()));
+	       
 	        }
 		
 
@@ -80,14 +83,14 @@ public class TrexinHCATest {
 		public void reduce(Text key, Iterable<Text> values, Context context)
 				throws IOException, InterruptedException {
       
-			System.out.println(key);
+		//	System.out.println("Key: " + key);
 			int sum = 0;
 			for (Text val : values) {
 				sum++;
-				System.out.println(val.toString());
+			//System.out.println(val.toString());
 			}
 			
-			System.out.println(sum);
+	//		System.out.println(sum);
 			Text textResult = new Text(Integer.toString(sum));
 			context.write(key, textResult);
 		}
