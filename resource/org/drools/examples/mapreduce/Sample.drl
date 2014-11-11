@@ -2,7 +2,7 @@ package com.drools.examples.mapreduce
  
 import com.trexinhca.MapperMessage;
  
-rule "Hello World"
+rule "Hello World"u
     when
         m : MapperMessage( status == MapperMessage.HELLO, myMessage : message )
     then
@@ -27,5 +27,5 @@ rule "Hospital Code 1"
        m : MapperMessage(  HCPCS_CD_1 != "", myMessage : message )
     then
       m.addClassification(m.getHCPCS_CD_1()) ;
-    // System.out.println("Here");
+   
 end

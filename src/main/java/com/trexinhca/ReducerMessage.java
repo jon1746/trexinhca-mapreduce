@@ -3,7 +3,7 @@ package com.trexinhca;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class MapperMessage {
+public  class ReducerMessage {
 
 	public String getLINE_ICD9_DGNS_CD_13() {
 		return LINE_ICD9_DGNS_CD_13;
@@ -13,7 +13,6 @@ public  class MapperMessage {
 		LINE_ICD9_DGNS_CD_13 = lINE_ICD9_DGNS_CD_13;
 	}
 
-	private List<String> classifications;
 	private String message;
 	private String DESYNPUF_ID;
 	private String CLM_ID;
@@ -158,9 +157,8 @@ public  class MapperMessage {
 	private String LINE_ICD9_DGNS_CD_12;
 	private String LINE_ICD9_DGNS_CD_13;
 
-	public MapperMessage(String value) {
+	public ReducerMessage(String value) {
 		String[] inputs = value.toString().split(",");
-		classifications = new ArrayList<String>();
 		DESYNPUF_ID = inputs[0];
 		CLM_ID = inputs[1];
 		CLM_FROM_DT = inputs[2];
@@ -289,20 +287,12 @@ public  class MapperMessage {
 		 */
 	}
 
-	public List<String> getClassifications() {
-		return classifications;
-	}
-
-	public void setClassifications(List<String> classifications) {
-		this.classifications = classifications;
-	}
-
-	public void addClassification(String classification) {
-		classifications.add(classification);
-	}
+	
 
 	private int status;
-
+    public void consume(ReducerMessage mapperMessage){
+    }
+    
 	public String getMessage() {
 		return this.message;
 	}

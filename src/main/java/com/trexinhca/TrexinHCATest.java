@@ -34,6 +34,7 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 import com.trexinhca.MapperMessage;
+import com.trexinhca.ReducerMessage;
 
 
 import java.util.Iterator;
@@ -55,9 +56,8 @@ public class TrexinHCATest {
 
 			// System.out.println("Made it to rules");
 			// long startTime = System.nanoTime();
+		//	System.out.println(key);
 			MapperMessage message = new MapperMessage(value.toString());
-			message.setMessage("Hello World");
-			message.setStatus(MapperMessage.HELLO);
 			FactHandle fh = TrexinHCATest.ksession.insert(message);
 			TrexinHCATest.ksession.fireAllRules();
 			TrexinHCATest.ksession.delete(fh);
@@ -65,7 +65,7 @@ public class TrexinHCATest {
 			// long duration = (endTime - startTime); 
 			// System.out.println(duration)
 			Iterator<String> iterator = message.getClassifications().iterator();
-	        while (iterator.hasNext()) {
+			  while (iterator.hasNext()) {
 	        	Text newKey=new Text(iterator.next());
 	        //	System.out.println(newKey);
 	        	context.write(newKey, new Text(message.toString()));
@@ -81,20 +81,19 @@ public class TrexinHCATest {
 	
 		@Override
 		public void reduce(Text key, Iterable<Text> values, Context context)
-				throws IOException, InterruptedException {
-      
-		//	System.out.println("Key: " + key);
-			int sum = 0;
-			for (Text val : values) {
-				sum++;
+				throws IOException, InterruptedException {		
+			Iterator<Text> iterator = values.iterator();
+			ReducerMessage reducedMessage = new ReducerMessage(iterator.next().toString());
+			  while (iterator.hasNext()) {
+				  ReducerMessage consumedMessage = new ReducerMessage(iterator.next().toString());
+				  reducedMessage.consume(consumedMessage);
 			//System.out.println(val.toString());
 			}
 			
-	//		System.out.println(sum);
-			Text textResult = new Text(Integer.toString(sum));
+			Text textResult = new Text(reducedMessage.toString());
 			context.write(key, textResult);
 		}
-	}
+	}	
 
 	public static void main(String[] args) throws Exception {
 
