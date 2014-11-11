@@ -2,7 +2,7 @@ package com.drools.examples.mapreduce
  
 import com.trexinhca.MapperMessage;
  
-rule "Hello World"u
+rule "Hello World"
     when
         m : MapperMessage( status == MapperMessage.HELLO, myMessage : message )
     then

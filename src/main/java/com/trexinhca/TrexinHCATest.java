@@ -87,7 +87,6 @@ public class TrexinHCATest {
 			  while (iterator.hasNext()) {
 				  ReducerMessage consumedMessage = new ReducerMessage(iterator.next().toString());
 				  reducedMessage.consume(consumedMessage);
-			//System.out.println(val.toString());
 			}
 			
 			Text textResult = new Text(reducedMessage.toString());
