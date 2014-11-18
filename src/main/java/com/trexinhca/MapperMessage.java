@@ -212,6 +212,7 @@ public  class MapperMessage {
 		HCPCS_CD_11 = inputs[49];
 		HCPCS_CD_12 = inputs[50];
 		HCPCS_CD_13 = inputs[51];
+		message="";
 		/*
 		 * LINE_NCH_PMT_AMT_1 = inputs[52]; LINE_NCH_PMT_AMT_2 = inputs[53];
 		 * LINE_NCH_PMT_AMT_3 = inputs[54]; LINE_NCH_PMT_AMT_4 = inputs[55];
@@ -1475,7 +1476,7 @@ public  class MapperMessage {
 	
 	public String toString(){
 		//Yes I know this is not efficient
-		return CLM_FROM_DT + "," + CLM_ID + ","+ CLM_FROM_DT + "," + DESYNPUF_ID;
+		return DESYNPUF_ID+","+CLM_ID + ","+CLM_FROM_DT + "," +  CLM_THRU_DT +"," + message;
 	
 	}
 	

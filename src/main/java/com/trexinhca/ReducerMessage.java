@@ -163,7 +163,8 @@ public  class ReducerMessage {
 		CLM_ID = inputs[1];
 		CLM_FROM_DT = inputs[2];
 		CLM_THRU_DT = inputs[3];
-		ICD9_DGNS_CD_1 = inputs[4];
+		message = inputs[4];
+		/*ICD9_DGNS_CD_1 = inputs[4];
 		ICD9_DGNS_CD_2 = inputs[5];
 		ICD9_DGNS_CD_3 = inputs[6];
 		ICD9_DGNS_CD_4 = inputs[7];
@@ -210,7 +211,7 @@ public  class ReducerMessage {
 		HCPCS_CD_11 = inputs[49];
 		HCPCS_CD_12 = inputs[50];
 		HCPCS_CD_13 = inputs[51];
-		/*
+	
 		 * LINE_NCH_PMT_AMT_1 = inputs[52]; LINE_NCH_PMT_AMT_2 = inputs[53];
 		 * LINE_NCH_PMT_AMT_3 = inputs[54]; LINE_NCH_PMT_AMT_4 = inputs[55];
 		 * LINE_NCH_PMT_AMT_5 = inputs[56]; LINE_NCH_PMT_AMT_6 = inputs[57];
@@ -1465,9 +1466,10 @@ public  class ReducerMessage {
 	
 	public String toString(){
 		//Yes I know this is not efficient
-		return CLM_FROM_DT + "," + CLM_ID + ","+ CLM_FROM_DT + "," + DESYNPUF_ID;
+		return DESYNPUF_ID+","+CLM_ID + ","+CLM_FROM_DT + "," +  CLM_THRU_DT + "," + message ;
 	
 	}
+	
 	
 
 }
