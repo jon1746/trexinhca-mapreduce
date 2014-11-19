@@ -2,30 +2,45 @@ package com.drools.examples.mapreduce
  
 import com.trexinhca.MapperMessage;
  
-rule "Hello World"
+rule "Chest Pain"
     when
-        m : MapperMessage( status == MapperMessage.HELLO, myMessage : message )
+       m : MapperMessage(  ICD9_DGNS_CD_1 == "78550")
+          MapperMessage(  HCPCS_CD_1 == "71275" || HCPCS_CD_2 == "71275"|| HCPCS_CD_3 == "71275" || HCPCS_CD_4 == "71275" || HCPCS_CD_5 == "71275" || HCPCS_CD_6 == "71275" || HCPCS_CD_7 == "71275")
+       
     then
-     //   System.out.println( myMessage );
-        m.setMessage( "Goodbye cruel world" );
-        m.setStatus( MapperMessage.GOODBYE );
-        m.setDESYNPUF_ID("XXX");
-        m.addClassification("BAR");
-        update( m );
-  //   System.out.println("You made it here2");
-end
-
-rule "GoodBye"
-    when
-       m : MapperMessage( status == MapperMessage.GOODBYE, myMessage : message )
-    then
-      m.addClassification("FOO") ;
-end
-
-rule "Hospital Code 1"
-    when
-       m : MapperMessage(  HCPCS_CD_1 != "", myMessage : message )
-    then
-      m.addClassification(m.getHCPCS_CD_1()) ;
+      m.setMessage("ChestPainIssue");
+      m.addClassification(m.getCLM_ID()) ;
    
 end
+
+
+rule "Chest Pain 2"
+    when
+       m : MapperMessage(  ICD9_DGNS_CD_1 == "78559" )
+           MapperMessage(  HCPCS_CD_1 == "71275" || HCPCS_CD_2 == "71275"|| HCPCS_CD_3 == "71275" || HCPCS_CD_4 == "71275" || HCPCS_CD_5 == "71275" || HCPCS_CD_6 == "71275" || HCPCS_CD_7 == "71275")
+    then
+     m.setMessage("ChestPainIssue");
+      m.addClassification(m.getCLM_ID()) ;
+   
+end
+
+rule "Renal Failure"
+    when
+       m : MapperMessage(  ICD9_DGNS_CD_1 == "5853" )
+           MapperMessage(  HCPCS_CD_1 == "J0885" || HCPCS_CD_2 == "J0885"|| HCPCS_CD_3 == "J0885" || HCPCS_CD_4 == "J0885" || HCPCS_CD_5 == "J0885" || HCPCS_CD_6 == "J0885" || HCPCS_CD_7 == "J0885")
+    then
+     m.setMessage("RenalIssue");
+      m.addClassification(m.getCLM_ID()) ;
+   
+end
+
+rule "Renal Failure 2"
+    when
+       m : MapperMessage(  ICD9_DGNS_CD_1 == "V560" )
+           MapperMessage(  HCPCS_CD_1 == "J0885" || HCPCS_CD_2 == "J0885"|| HCPCS_CD_3 == "J0885" || HCPCS_CD_4 == "J0885" || HCPCS_CD_5 == "J0885" || HCPCS_CD_6 == "J0885" || HCPCS_CD_7 == "J0885")
+    then
+     m.setMessage("RenalIssue");
+      m.addClassification(m.getCLM_ID()) ;
+   
+end
+

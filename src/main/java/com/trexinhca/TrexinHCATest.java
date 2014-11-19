@@ -44,6 +44,17 @@ public class TrexinHCATest {
 	public static KieServices ks;
 	public static KieContainer kContainer;
 	public static KieSession ksession;
+	
+	public static KieSession getKsession(){
+		   if (ksession==null) {
+			   ks = KieServices.Factory.get();
+			kContainer = ks.getKieClasspathContainer();
+			ksession = TrexinHCATest.kContainer.newKieSession("MapReduceKS");
+		   };
+		   return ksession;
+			   
+		   }
+	
 
 	public static class TokenizerMapper extends
 			Mapper<Object, Text, Text, Text> {
@@ -54,13 +65,19 @@ public class TrexinHCATest {
 		
 			// System.out.println( strings.length );
 
-			// System.out.println("Made it to rules");
+		//	 System.out.println("Made it 1");
 			// long startTime = System.nanoTime();
-		//	System.out.println(key);
+	//		System.out.println(key);
+	//		System.out.println(value.toString());
 			MapperMessage message = new MapperMessage(value.toString());
-			FactHandle fh = TrexinHCATest.ksession.insert(message);
+	//		System.out.println("Made it 2");
+			
+			FactHandle fh = TrexinHCATest.getKsession().insert(message);
+//			System.out.println("Made it 3");
 			TrexinHCATest.ksession.fireAllRules();
+	//		System.out.println("Made it 4");
 			TrexinHCATest.ksession.delete(fh);
+		//	System.out.println("Made it to rules");
 			// long endTime = System.nanoTime();
 			// long duration = (endTime - startTime); 
 			// System.out.println(duration)
